@@ -2,35 +2,31 @@
 '''class base_model'''
 
 import uuid
-import datetime
-import json
+from datetime import datetime
+
 
 '''def class'''
 
 class BaseModel:
-    __nb_object = 0
     
     def __init__(self, id):
         '''constructor'''
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
-        if id is not None:
-            self.id = id
-        else:
-            self.__class__.__nb_object += 1
-            self.id = self.__class__.__nb_object
+    def __str__(self):
+        '''def str'''
+        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
 
-    id = uuid.uuid4()
-    x = str(id)
-    print(type(x))
-
-    created_at = datetime.datetime.now()
-    print(type(created_at))
-    updated_at = datetime.datetime.now()
-    
-    @staticmethod
-    def save(dictionnaries):
+    def save(self):
         '''def save'''
-        if dictionnaries is None or len(dictionnaries) == 0:
-            return "[]"
-        else:
-            return json.dumps(dictionnaries)
+        self.updated_at = datetime.now()
+
+    def to_dict(self):
+        '''def to_dict'''
+        obj_dict = self.__dict__.copy()
+        obj_dict['__class__'] = type(self).__name__
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        return obj_dict
