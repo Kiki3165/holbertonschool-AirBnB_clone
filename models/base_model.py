@@ -26,7 +26,7 @@ class BaseModel:
     def to_dict(self):
         '''def to_dict'''
         obj_dict = self.__dict__.copy()
-        obj_dict['__class__'] = type(self).__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
+        obj_dict = type(self).__name__
+        obj_dict = self.created_at.isoformat()
+        obj_dict = self.updated_at.isoformat()
         return obj_dict
