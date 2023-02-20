@@ -3,6 +3,7 @@
 
 import uuid
 import datetime
+import json
 
 '''def class'''
 
@@ -19,26 +20,17 @@ class BaseModel:
             self.id = self.__class__.__nb_object
 
     id = uuid.uuid4()
-    s = str(id)
-    print('Type', type(id), 'UUID', id)
+    x = str(id)
+    print(type(x))
 
     created_at = datetime.datetime.now()
-    print(created_at)
-
+    print(type(created_at))
     updated_at = datetime.datetime.now()
-    print(updated_at)
-
-    def __str__(self):
-        '''def str'''
-        
-        return f"[BaseModel] [{self.id}] [{self.__dict__}]"
-
-    def save(self):
+    
+    @staticmethod
+    def save(dictionnaries):
         '''def save'''
-        
-        return self.updated_at.replace(year=2000)
-
-    def to_dict(self):
-        '''def to_dict'''
-        
-        return f"[{self.id}] [{self.__dict__}]"
+        if dictionnaries is None or len(dictionnaries) == 0:
+            return "[]"
+        else:
+            return json.dumps(dictionnaries)
