@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Console"""
 import cmd
-import models
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -22,18 +22,17 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
+        """ Create new instance of BaseModel """
         if not arg:
             print("** class name missing **")
             return
-
-        if arg not in models.CLS_NAMES:
+        class_name = arg.split()[0]
+        if class_name != BaseModel:
             print("** class doesn't exist **")
             return
-        cls = models.CLS_NAMES[arg]
-        instance = cls()
-        """ Save the instance to the JSON file """
-        models.storage.save()
-        print(instance.id)
+        cls = BaseModel()
+        cls.save()
+        print(cls.id)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
