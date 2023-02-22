@@ -10,6 +10,12 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
+    def __init__(self):
+        """If the file doesn't exist"""
+        if not os.path.exists(self.__file_path):
+            with open(self.__file_path, "w") as f:
+                f.write("{}")
+
     def all(self):
         '''simple def'''
         return FileStorage.__objects
