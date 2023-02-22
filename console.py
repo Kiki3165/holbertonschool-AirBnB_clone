@@ -1,13 +1,17 @@
 #!/usr/bin/python3
 """Console"""
 import cmd
+import json
+
 from models.base_model import BaseModel
+
 
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
 
     prompt = '(hbnb) '
+    classes = {"BaseModel"}
 
     def do_quit(self, line):
         """Quit command"""
@@ -33,6 +37,19 @@ class HBNBCommand(cmd.Cmd):
         cls = BaseModel()
         cls.save()
         print(cls.id)
+    
+    def do_show(self, arg):
+        """" Prints string representation of an instance """
+        args = arg.split()
+        if not arg:
+            print("** class name missing **")
+        elif args[0] not in self.classes:
+            print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+
+
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
