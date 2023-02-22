@@ -35,7 +35,7 @@ class FileStorage:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     class_name, obj_id = key.split('.')
-                    module_name = 'models.basemodelbasemodel' + class_name.lower()
+                    module_name = 'models.base_model' + class_name.lower()
                     cls = getattr(__import__(module_name, fromlist=[class_name]), class_name)
                     obj = cls(**value)
                     FileStorage.__objects[key] = obj
