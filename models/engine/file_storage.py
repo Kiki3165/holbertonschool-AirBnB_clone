@@ -27,3 +27,18 @@ class FileStorage:
 
         with open(FileStorage.__file_path, 'w', encoding='utf-8') as f:
             json.dump(obj_dict, f, indent=4)
+
+    def reload(self):
+        '''simple def'''
+        try:
+            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
+                obj_dict = json.load(f)
+                for key, value in obj_dict.items():
+                    class_name, obj_id = key.split('.')
+                    module_name = 'models.' + class_name.lower()
+                    cls = getattr(__import__(module_name, fromlist=[class_name]), class_name)
+                    obj = cls(**value)
+                    FileStorage.__objects[key] = obj
+
+        except FileNotFoundError:
+            pass
