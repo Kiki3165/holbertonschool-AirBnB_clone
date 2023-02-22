@@ -9,16 +9,20 @@ from datetime import datetime
 
 class BaseModel:
     
-    def __init__(self, id=None):
-        '''def init'''
-        if id is None:
-            id = {}
+    def __init__(self, *args, **kwargs):
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+                if key != '__class__':
+                    setattr(self, key, value)
+            self.id = kwargs.get('id', str(uuid.uuid4()))
+            self.created_at = kwargs.get('created_at', datetime.now())
+            self.updated_at = datetime.now()
         else:
-            self.id = id
-
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         '''def str'''
@@ -31,7 +35,13 @@ class BaseModel:
     def to_dict(self):
         '''def to_dict'''
         obj_dict = self.__dict__.copy()
-        obj_dict = type(self).__name__
-        obj_dict = self.created_at.isoformat()
-        obj_dict = self.updated_at.isoformat()
+        obj_dict['__class__'] = type(self).__name__
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
+
+'''create new BaseModel'''
+bm1 = BaseModel()
+
+'''create new BaseModel based on bm1'''
+bm2 = BaseModel(**bm1.to_dict())
