@@ -48,6 +48,16 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
 
+    def do_destroy(self, arg):
+        pass
+
+    def do_all(self, arg):
+        pass
+
+    def do_update(self, arg):
+        pass
+
+
 
 
 
