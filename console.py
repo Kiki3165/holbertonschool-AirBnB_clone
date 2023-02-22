@@ -4,6 +4,7 @@ import cmd
 import json
 
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 
@@ -28,37 +29,36 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """ Create new instance of BaseModel """
         if not arg:
-            print("** class name missing **")
+            print('** class name missing **')
             return
-        class_name = arg.split()[0]
-        if class_name != BaseModel:
+
+        try:
+            new_instance = eval(arg)()
+            new_instance.save()
+            print(new_instance.id)
+        except NameError:
             print("** class doesn't exist **")
-            return
-        cls = BaseModel()
-        cls.save()
-        print(cls.id)
-    
+
     def do_show(self, arg):
-        """" Prints string representation of an instance """
+        '''Prints the string representation of an instance based on the class name and id'''
         args = arg.split()
         if not arg:
             print("** class name missing **")
-        elif args[0] not in self.classes:
+            return
+        try:
+            cls = eval(args[0])
+        except NameError:
             print("** class doesn't exist **")
-        elif len(args) == 1:
+            return
+        if len(args) < 2:
             print("** instance id missing **")
-
-    def do_destroy(self, arg):
-        pass
-
-    def do_all(self, arg):
-        pass
-
-    def do_update(self, arg):
-        pass
-
-
-
+            return
+        key = "{}.{}".format(args[0], args[1])
+        all_objs = FileStorage().all()
+        if key not in all_objs:
+            print("** no instance found **")
+        else:
+            print(all_objs[key])
 
 
 if __name__ == '__main__':
