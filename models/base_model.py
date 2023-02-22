@@ -39,3 +39,9 @@ class BaseModel:
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
         return obj_dict
+
+'''create new BaseModel and prints attr'''
+bm1 = BaseModel()
+
+'''create new BaseModel on bm1 and prints attr'''
+bm2 = BaseModel(**bm1.to_dict())
