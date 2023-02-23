@@ -93,7 +93,7 @@ class HBNBCommand(cmd.Cmd):
         based or not on the class name"""
         args = arg.split()
         try:
-            cls = eval(args[0])
+            cls = eval(arg[0])
         except NameError:
             print("** class doesn't exist **")
             return
