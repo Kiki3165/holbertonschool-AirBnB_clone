@@ -10,7 +10,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
+from models import storage
 
 
 
@@ -60,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         key = "{}.{}".format(args[0], args[1])
-        all_objs = FileStorage().all()
+        all_objs = storage.all()
         if key not in all_objs:
             print("** no instance found **")
         else:
@@ -81,12 +81,12 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         key = "{}.{}".format(args[0], args[1])
-        all_objs = FileStorage().all()
+        all_objs = storage.all()
         if key not in all_objs:
             print("** no instance found **")
         else:
             del all_objs[key]
-            FileStorage().save()
+            storage.save()
 
 
 if __name__ == '__main__':
