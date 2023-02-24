@@ -101,9 +101,10 @@ If the attribute name is missing, print ** attribute name missing ** (ex: $ upda
 
 If the value for the attribute name doesn’t exist, print ** value missing ** (ex: $ update BaseModel existing-id first_name)
 
-##Data Persistence
+## Data Persistence
+
 This console application uses a simple file-based database to store user accounts and accommodation listings. User accounts are stored in the users.json file, and accommodation listings are stored in the listings.json file. Bookings are stored in a separate bookings.json file.
 
-##Contributing
+## Contributing
 
 Contributions to this project are welcome! If you find a bug or have an idea for a new feature, please create a GitHub issue or pull request.
