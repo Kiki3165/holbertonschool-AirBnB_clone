@@ -4,37 +4,46 @@ from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 
 
+
+
 class TestFileStorage(unittest.TestCase):
     def setUp(self):
         self.storage = FileStorage()
-        self.model = BaseModel()
-        self.model.name = "test"
+        self.base_model = BaseModel()
+        self.storage.new(self.base_model)
+        self.storage.save()
 
     def tearDown(self):
-        if os.path.exists("file.json"):
+        try:
             os.remove("file.json")
+        except:
+            pass
 
     def test_all(self):
-        self.assertEqual(self.storage.all(), {})
-        self.storage.new(self.model)
-        self.assertEqual(len(self.storage.all()), 1)
+        all_objects = self.storage.all()
+        self.assertEqual(type(all_objects), dict)
+        self.assertIn("BaseModel.{}".format(self.base_model.id), all_objects)
 
     def test_new(self):
-        self.storage.new(self.model)
-        key = "{}.{}".format(self.model.__class__.__name__, self.model.id)
-        self.assertIn(key, self.storage.all())
+        new_model = BaseModel()
+        self.storage.new(new_model)
+        all_objects = self.storage.all()
+        self.assertIn("BaseModel.{}".format(new_model.id), all_objects)
 
     def test_save(self):
-        self.storage.new(self.model)
-        self.storage.save()
-        self.assertTrue(os.path.exists("file.json"))
+        with open("file.json", "r") as f:
+            file_contents = f.read()
+            self.assertIn("BaseModel.{}".format(self.base_model.id), file_contents)
 
     def test_reload(self):
-        self.storage.new(self.model)
-        self.storage.save()
         self.storage.reload()
-        key = "{}.{}".format(self.model.__class__.__name__, self.model.id)
-        self.assertIn(key, self.storage.all())
+        all_objects = self.storage.all()
+        self.assertIn("BaseModel.{}".format(self.base_model.id), all_objects)
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_deserialize_base_model(self):
+        with open("file.json", "r") as f:
+            file_contents = f.read()
+        obj_dict = eval(file_contents)
+        new_model = BaseModel(**obj_dict["BaseModel.{}".format(self.base_model.id)])
+        self.assertEqual(type(new_model), BaseModel)
+        self.assertEqual(new_model.id, self.base_model.id)
