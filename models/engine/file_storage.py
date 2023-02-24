@@ -2,44 +2,39 @@
 '''simple def class'''
 
 
-from models.base_model import BaseModel
-import json
-import os
+import uuid
+import models
+from datetime import datetime
 
+storage = models.storage
+
+import json
 
 class FileStorage:
-    __file_path = 'file.json'
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        '''simple def'''
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
-        '''simple def'''
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[key] = obj
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        self.__objects[key] = obj
 
     def save(self):
-        '''simple def'''
-        obj_dict = {}
-        for key, obj in FileStorage.__objects.items():
-            obj_dict[key] = obj.to_dict()
-
-        with open(FileStorage.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(obj_dict, f, indent=4)
+        objects_dict = {}
+        for key, value in self.__objects.items():
+            objects_dict[key] = value.to_dict()
+        with open(self.__file_path, "w", encoding="utf-8") as f:
+            json.dump(objects_dict, f)
 
     def reload(self):
-        '''simple def'''
         try:
-            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
-                obj_dict = json.load(f)
-                for key, value in obj_dict.items():
-                    class_name, obj_id = key.split('.')
-                    module_name = 'models.BaseModel' + class_name.lower()
-                    cls = getattr(__import__(module_name, fromlist=[class_name]), class_name)
-                    obj = cls(**value)
-                    FileStorage.__objects[key] = obj
-
+            with open(self.__file_path, "r", encoding="utf-8") as f:
+                objects_dict = json.load(f)
+                for key, value in objects_dict.items():
+                    class_name, obj_id = key.split(".")
+                    class_obj = eval(class_name)
+                    self.__objects[key] = class_obj(**value)
         except FileNotFoundError:
             pass
