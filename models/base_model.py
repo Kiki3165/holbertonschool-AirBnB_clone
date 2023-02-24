@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 '''class base_model'''
 
+
 import uuid
 from datetime import datetime
-
-
-'''def class'''
+from models import storage
 
 class BaseModel:
-    
     def __init__(self, *args, **kwargs):
         if kwargs:
             for key, value in kwargs.items():
@@ -16,32 +14,21 @@ class BaseModel:
                     value = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
                 if key != '__class__':
                     setattr(self, key, value)
-            self.id = kwargs.get('id', str(uuid.uuid4()))
-            self.created_at = kwargs.get('created_at', datetime.now())
-            self.updated_at = datetime.now()
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
 
     def __str__(self):
-        '''def str'''
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
-        '''def save'''
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
-        '''def to_dict'''
-        obj_dict = self.__dict__.copy()
-        obj_dict['__class__'] = type(self).__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
-        return obj_dict
-
-'''create new BaseModel'''
-bm1 = BaseModel()
-
-'''create new BaseModel based on bm1'''
-bm2 = BaseModel(**bm1.to_dict())
+        dictionary = dict(self.__dict__)
+        dictionary['__class__'] = self.__class__.__name__
+        dictionary['created_at'] = self.created_at.isoformat()
+        dictionary['updated_at'] = self.updated_at.isoformat()
+        return dictionary
