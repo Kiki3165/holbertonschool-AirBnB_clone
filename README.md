@@ -1,5 +1,4 @@
-# Airbnb Clone Console
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+# Airbnb Clone Console [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 This is a console application that simulates some of the basic functionality of the Airbnb website. With this console, you can create, view, and book accommodations, as well as manage user accounts.
 
 ##Installation
