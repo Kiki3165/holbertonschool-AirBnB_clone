@@ -103,7 +103,7 @@ If the value for the attribute name doesn’t exist, print ** value missing ** (
 
 ## Data Persistence
 
-This console application uses a simple file-based database to store user accounts and accommodation listings. User accounts are stored in the users.json file, and accommodation listings are stored in the listings.json file. Bookings are stored in a separate bookings.json file.
+This console application uses a simple file-based database to store user accounts and accommodation listings in a file.json file.
 
 ## Contributing
 
@@ -112,4 +112,5 @@ Contributions to this project are welcome! If you find a bug or have an idea for
 ## Authors 
 
 Camille Favriel : https://github.com/CamilleFavriel
+
 Kyllian Terrasson : https://github.com/Kiki3165
