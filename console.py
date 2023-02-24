@@ -92,12 +92,62 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Prints all string representation of all instances
         based or not on the class name"""
+        if arg:
+            try:
+                cls = eval(arg)
+                all_objs = storage.all(cls)
+                print([str(all_objs[obj]) for obj in all_objs])
+            except:
+                print("** class doesn't exist **")
+                return
+            else:
+                all_objs = storage.all()
+                print([str(all_objs[obj]) for obj in all_objs])
+
+    def do_update(self, arg):
+        """ Updates an instance based on the class name and id """
         args = arg.split()
+        if not args:
+            print("** class name missing **")
+            return
         try:
-            cls = eval(arg[0])
+            cls = eval(args[0])
         except NameError:
             print("** class doesn't exist **")
             return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        key = "{}.{}".format(args[0], args[1])
+        all_objs = storage.all()
+
+        if key not in all_objs:
+            print("** no instance found **")
+            return
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        obj = all_objs[key]
+        attr_name = args[2]
+        value = args[3]
+
+        """ Cast the attribute value to its corresponding data type """
+        if isinstance(obj.__dict__[attr_name], int):
+            value = int(value)
+        elif isinstance(obj.__dict__[attr_name], float):
+            value = float(value)
+        else:
+            value = str(value)
+
+        setattr(obj, attr_name, value)
+        obj.save()
 
 
 if __name__ == '__main__':
