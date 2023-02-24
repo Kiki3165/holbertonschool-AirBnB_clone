@@ -108,3 +108,8 @@ This console application uses a simple file-based database to store user account
 ## Contributing
 
 Contributions to this project are welcome! If you find a bug or have an idea for a new feature, please create a GitHub issue or pull request.
+
+## Authors 
+
+Camille Favriel : https://github.com/CamilleFavriel
+Kyllian Terrasson : https://github.com/Kiki3165
