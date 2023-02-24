@@ -13,12 +13,12 @@ from models.base_model import BaseModel
 from models import storage
 
 
-
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
 
     prompt = '(hbnb) '
-    classes = {"BaseModel", "User", "Amenity", "City", "Review", "State", "Place"}
+    classes = {"BaseModel", "User", "Amenity", 
+               "City", "Review", "State", "Place"}
 
     def do_quit(self, line):
         """Quit command"""
@@ -46,7 +46,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, arg):
-        '''Prints the string representation of an instance based on the class name and id'''
+        '''Prints the string representation of an
+        instance based on the class name and id'''
         args = arg.split()
         if not arg:
             print("** class name missing **")
