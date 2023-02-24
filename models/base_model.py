@@ -9,6 +9,7 @@ from models import storage
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
+        '''def'''
         if kwargs:
             for key, value in kwargs.items():
                 if key == 'created_at' or key == 'updated_at':
@@ -21,13 +22,16 @@ class BaseModel:
             self.updated_at = datetime.now()
 
     def __str__(self):
+        '''def'''
         return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
+        '''def'''
         self.updated_at = datetime.now()
         storage.save()
 
     def to_dict(self):
+        '''def'''
         dictionary = dict(self.__dict__)
         dictionary['__class__'] = self.__class__.__name__
         dictionary['created_at'] = self.created_at.isoformat()
