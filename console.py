@@ -64,7 +64,8 @@ class HBNBCommand(cmd.Cmd):
         if key not in all_objs:
             print("** no instance found **")
         else:
-            print(all_objs[key])
+            obj = all_objs[key]
+            print(obj)
 
     def do_destroy(self, arg):
         """Destroy command to delete an instance"""
