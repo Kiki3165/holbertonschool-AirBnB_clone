@@ -2,13 +2,8 @@
 '''simple def class'''
 
 
-import uuid
-import models
-from datetime import datetime
-
-storage = models.storage
-
 import json
+
 
 class FileStorage:
     __file_path = "file.json"
@@ -22,19 +17,22 @@ class FileStorage:
         self.__objects[key] = obj
 
     def save(self):
-        objects_dict = {}
+        new_dict = {}
         for key, value in self.__objects.items():
-            objects_dict[key] = value.to_dict()
-        with open(self.__file_path, "w", encoding="utf-8") as f:
-            json.dump(objects_dict, f)
+            new_dict[key] = value.to_dict()
+        with open(self.__file_path, 'w') as f:
+            json.dump(new_dict, f)
 
     def reload(self):
         try:
-            with open(self.__file_path, "r", encoding="utf-8") as f:
-                objects_dict = json.load(f)
-                for key, value in objects_dict.items():
-                    class_name, obj_id = key.split(".")
-                    class_obj = eval(class_name)
-                    self.__objects[key] = class_obj(**value)
-        except FileNotFoundError:
+            with open(self.__file_path, 'r') as f:
+                FileStorage.__objects = json.load(f)
+                for key, value in FileStorage.__objects.items():
+                    module_name = value['__class__']
+                    class_name = module_name.split(".")[1]
+                    module = __import__('models.' + module_name, fromlist=[class_name])
+                    class_ = getattr(module, class_name)
+                    obj = class_(**value)
+                    FileStorage.__objects[key] = obj
+        except:
             pass
