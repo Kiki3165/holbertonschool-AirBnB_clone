@@ -4,10 +4,12 @@
 
 import uuid
 from datetime import datetime
-from models import storage
+from models.engine.file_storage import FileStorage
 
 
 class BaseModel:
+    storage = FileStorage()
+
     def __init__(self, *args, **kwargs):
         '''def'''
         if kwargs:
@@ -20,7 +22,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+        BaseModel.storage.new(self)
 
     def __str__(self):
         '''def'''
@@ -29,7 +31,7 @@ class BaseModel:
     def save(self):
         '''def'''
         self.updated_at = datetime.now()
-        storage.save()
+        BaseModel.storage.save()
 
     def to_dict(self):
         '''def'''
