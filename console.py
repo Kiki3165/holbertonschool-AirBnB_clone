@@ -3,6 +3,7 @@
 import cmd
 import json
 
+
 from models.user import User
 from models.amenity import Amenity
 from models.city import City
@@ -61,11 +62,10 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
         key = "{}.{}".format(args[0], args[1])
-        all_objs = storage.all()
-        if key not in all_objs:
+        obj = storage.all().get(key)
+        if obj is None:
             print("** no instance found **")
         else:
-            obj = all_objs[key]
             print(obj)
 
     def do_destroy(self, arg):
@@ -96,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
         if arg:
             try:
                 cls = eval(arg)
-                all_objs = storage.all(cls)
+                all_objs = storage.all()
                 print([str(all_objs[obj]) for obj in all_objs])
             except:
                 print("** class doesn't exist **")
